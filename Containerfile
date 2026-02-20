@@ -59,6 +59,29 @@ ARG VERSION_PRETTY="${VERSION_PRETTY}"
 COPY system_files/desktop/shared system_files/desktop/${BASE_IMAGE_NAME} /
 COPY firmware /
 
+# Enable swap file for Hibernation
+RUN /usr/libexec/bazzite-setup-swapfile.sh
+
+# --- Installation of Chrome, Discord, and 1Password ---
+RUN mkdir -p /var/opt/google /var/opt/1Password && \
+    chmod 755 /var/opt /var/opt/google /var/opt/1Password
+
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    set -euo pipefail && \
+    mkdir -p /tmp/rpms && cd /tmp/rpms && \
+    curl -A "Mozilla/5.0" -fL \
+        "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" \
+        -o 1password.rpm && \
+    curl -A "Mozilla/5.0" -fL \
+        "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" \
+        -o chrome.rpm && \
+    dnf5 -y install ./1password.rpm ./chrome.rpm && \
+    rm -rf /tmp/rpms
+
+
+
 # Copy Homebrew files from the brew image
 COPY --from=ghcr.io/ublue-os/brew:latest@sha256:d589a2a9e423e420dbe97de02efff1379d9a3d5ad84c1431db935cc62dc5eeb2 /system_files /
 
@@ -302,26 +325,6 @@ RUN --mount=type=cache,dst=/var/cache \
     sed -i~ -E 's/=.\$\(command -v (nft|ip6?tables-legacy).*/=/g' /usr/lib/waydroid/data/scripts/waydroid-net.sh && \
     sed -i 's/ --xdg-runtime=\\"${XDG_RUNTIME_DIR}\\"//g' /usr/bin/btrfs-assistant-launcher && \
     /ctx/cleanup
-
-# --- Installation of Chrome, Discord, and 1Password ---
-    # Prepare /opt for Chrome and 1Password RPMs
-RUN mkdir -p /opt/google /opt/1Password && \
-    chmod 755 /opt /opt/google /opt/1Password
-
-RUN --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    set -euo pipefail && \
-    mkdir -p /tmp/rpms && cd /tmp/rpms && \
-    curl -A "Mozilla/5.0" -fL \
-        "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" \
-        -o 1password.rpm && \
-    curl -A "Mozilla/5.0" -fL \
-        "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" \
-        -o chrome.rpm && \
-    dnf5 -y install ./1password.rpm ./chrome.rpm && \
-    rm -rf /tmp/rpms
-
 
 # Install Steam & Lutris, plus supporting packages
 RUN --mount=type=cache,dst=/var/cache \
@@ -610,9 +613,6 @@ ARG VERSION_TAG="${VERSION_TAG}"
 ARG VERSION_PRETTY="${VERSION_PRETTY}"
 
 COPY system_files/deck/shared system_files/deck/${BASE_IMAGE_NAME} /
-
-# Enable swap file for Hibernation
-RUN /usr/libexec/bazzite-setup-swapfile.sh
 
 # Setup Copr repos
 RUN --mount=type=cache,dst=/var/cache \
