@@ -60,7 +60,6 @@ COPY system_files/desktop/shared system_files/desktop/${BASE_IMAGE_NAME} /
 COPY firmware /
 
 # Enable swap file for Hibernation
-RUN dos2unix system_files/deck/shared/usr/libexec/bazzite-enable-hibernate.sh
 RUN chmod +x /usr/libexec/bazzite-enable-hibernate.sh
 RUN /usr/libexec/bazzite-enable-hibernate.sh
 
