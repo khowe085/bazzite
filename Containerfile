@@ -303,6 +303,21 @@ RUN --mount=type=cache,dst=/var/cache \
     sed -i 's/ --xdg-runtime=\\"${XDG_RUNTIME_DIR}\\"//g' /usr/bin/btrfs-assistant-launcher && \
     /ctx/cleanup
 
+# --- Installation of Chrome, Discord, and 1Password ---
+RUN --mount=type=cache,dst=/var/cache \
+    --mount=type=cache,dst=/var/log \
+    --mount=type=tmpfs,dst=/tmp \
+    set -euo pipefail && \
+    mkdir -p /tmp/rpms && cd /tmp/rpms && \
+    echo "Downloading vendor RPMs..." && \
+    curl -fL "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" -o 1password.rpm && \
+    curl -fL "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -o chrome.rpm && \
+    curl -fL "https://discord.com/api/download?platform=linux&format=rpm" -o discord.rpm && \
+    echo "Installing vendor RPMs..." && \
+    dnf5 -y install ./1password.rpm ./chrome.rpm ./discord.rpm && \
+    rm -rf /tmp/rpms
+
+
 # Install Steam & Lutris, plus supporting packages
 RUN --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
