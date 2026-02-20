@@ -3,7 +3,15 @@ set -euo pipefail
 
 SWAPDIR="/var/swap"
 SWAPFILE="/var/swap/swapfile"
-SWAPSIZE="26G"   # match the docs; adjust if desired
+
+
+echo "[bazzite] Detecting system RAM..." 
+RAM_KB=$(grep MemTotal /proc/meminfo | awk '{print $2}') 
+RAM_GB=$(( (RAM_KB + 1024*1024 - 1) / (1024*1024) )) 
+SWAP_GB=$(( RAM_GB + (RAM_GB) ))
+SWAPSIZE="${SWAP_GB}G"
+
+
 
 echo "[bazzite] Creating /var/swap subvolume..."
 if [[ ! -d "$SWAPDIR" ]]; then
