@@ -309,11 +309,11 @@ RUN --mount=type=cache,dst=/var/cache \
     --mount=type=tmpfs,dst=/tmp \
     set -euo pipefail && \
     mkdir -p /tmp/rpms && cd /tmp/rpms && \
-    echo "Downloading vendor RPMs..." && \
+    echo "Downloading RPMs..." && \
     curl -fL "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" -o 1password.rpm && \
     curl -fL "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -o chrome.rpm && \
-    echo "Installing vendor RPMs..." && \
-    dnf5 -y install ./1password.rpm ./chrome.rpm ./discord.rpm && \
+    echo "Installing RPMs..." && \
+    dnf5 -y install ./1password.rpm ./chrome.rpm && \
     rm -rf /tmp/rpms
 
 
@@ -604,6 +604,9 @@ ARG VERSION_TAG="${VERSION_TAG}"
 ARG VERSION_PRETTY="${VERSION_PRETTY}"
 
 COPY system_files/deck/shared system_files/deck/${BASE_IMAGE_NAME} /
+
+# Enable swap file for Hibernation
+RUN /usr/libexec/bazzite-setup-swapfile.sh
 
 # Setup Copr repos
 RUN --mount=type=cache,dst=/var/cache \
