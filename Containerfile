@@ -312,7 +312,6 @@ RUN --mount=type=cache,dst=/var/cache \
     echo "Downloading vendor RPMs..." && \
     curl -fL "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" -o 1password.rpm && \
     curl -fL "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -o chrome.rpm && \
-    curl -fL "https://discord.com/api/download?platform=linux&format=rpm" -o discord.rpm && \
     echo "Installing vendor RPMs..." && \
     dnf5 -y install ./1password.rpm ./chrome.rpm ./discord.rpm && \
     rm -rf /tmp/rpms

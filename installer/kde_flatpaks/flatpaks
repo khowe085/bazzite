@@ -9,7 +9,8 @@ app/com.github.Matoking.protontricks/x86_64/stable
 app/io.github.flattool.Warehouse/x86_64/stable
 app/com.vysp3r.ProtonPlus/x86_64/stable
 app/com.github.Matoking.protontricks/x86_64/stable
-app/org.mozilla.firefox/x86_64/stable
+io.github.rfrench3.scopebuddy-gui
+com.discordapp.Discord
 com.obsproject.Studio
 runtime/com.obsproject.Studio.Plugin.OBSVkCapture/x86_64/stable
 runtime/com.obsproject.Studio.Plugin.Gstreamer/x86_64/stable
