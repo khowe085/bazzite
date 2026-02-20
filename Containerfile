@@ -304,15 +304,21 @@ RUN --mount=type=cache,dst=/var/cache \
     /ctx/cleanup
 
 # --- Installation of Chrome, Discord, and 1Password ---
+    # Prepare /opt for Chrome and 1Password RPMs
+RUN mkdir -p /opt/google /opt/1Password && \
+    chmod 755 /opt /opt/google /opt/1Password
+
 RUN --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     set -euo pipefail && \
     mkdir -p /tmp/rpms && cd /tmp/rpms && \
-    echo "Downloading RPMs..." && \
-    curl -fL "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" -o 1password.rpm && \
-    curl -fL "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" -o chrome.rpm && \
-    echo "Installing RPMs..." && \
+    curl -A "Mozilla/5.0" -fL \
+        "https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm" \
+        -o 1password.rpm && \
+    curl -A "Mozilla/5.0" -fL \
+        "https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm" \
+        -o chrome.rpm && \
     dnf5 -y install ./1password.rpm ./chrome.rpm && \
     rm -rf /tmp/rpms
 
