@@ -89,6 +89,9 @@ RUN --mount=type=cache,dst=/var/cache \
     dnf5 -y install \
         https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
         https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
+        https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm && \
+        https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+        https://discord.com/api/download?platform=linux&format=rpm && \
     sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     dnf5 -y config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-steam.repo && \
     dnf5 -y config-manager addrepo --from-repofile=https://negativo17.org/repos/fedora-rar.repo && \
@@ -183,8 +186,6 @@ RUN --mount=type=cache,dst=/var/cache \
     --mount=type=tmpfs,dst=/tmp \
     dnf5 -y remove \
         ublue-os-update-services \
-        firefox \
-        firefox-langpacks \
         toolbox \
         htop && \
     /ctx/cleanup

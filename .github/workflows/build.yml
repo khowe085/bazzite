@@ -59,7 +59,7 @@ jobs:
       matrix:
         image:
           - bazzite-deck
-          - bazzite-deck-nvidia
+          #- bazzite-deck-nvidia
         include:
           - fedora_version: 43
             kernel_version: ${{ (github.ref_name == 'testing' || github.ref_name == 'unstable') && 'latest' || 'latest' }}
