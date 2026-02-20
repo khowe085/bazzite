@@ -60,7 +60,7 @@ COPY system_files/desktop/shared system_files/desktop/${BASE_IMAGE_NAME} /
 COPY firmware /
 
 # Enable swap file for Hibernation
-RUN /usr/libexec/bazzite-setup-swapfile.sh
+RUN /usr/libexec/bazzite-enable-hibernate.sh
 
 # --- Installation of Chrome, Discord, and 1Password ---
 RUN mkdir -p /var/opt/google /var/opt/1Password && \
